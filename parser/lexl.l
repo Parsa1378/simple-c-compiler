@@ -18,7 +18,9 @@ ws  [ \t\r\f\v]+
 identifier (_|{letter})({letter}|{digit}|_){0,31}
 hex [0-9a-f]
 
+/* Exclusive states */
 %x CMNT
+/*%x PREPROC*/
 
 %%
   /* Keywords*/
@@ -47,6 +49,12 @@ hex [0-9a-f]
 <CMNT>"*/"                        {BEGIN INITIAL;}
 <CMNT>"/*"                        {printf("Line %3d: Nested comments are not valid!\n",yylineno);}
 <CMNT><<EOF>>                     {printf("Line %3d: Unterminated comment\n", cmnt_strt); yyterminate();}
+ /*^"#include"                       {BEGIN PREPROC;}*/
+ /*<PREPROC>"<"[^<>\n]+">"            {return HEADER_FILE;}*/
+ /*<PREPROC>{ws}                       ;*/
+ /*<PREPROC>\"[^"\n]+\"              {return HEADER_FILE;}*/
+ /*<PREPROC>\n                       {yylineno++; BEGIN INITIAL;}*/
+ /*<PREPROC>.                        {printf("Line %3d: Illegal header file format \n",yylineno);}*/
 "//".*                            ;
 
 \"[^\"\n]*\"     {
@@ -86,3 +94,20 @@ hex [0-9a-f]
 .                         {return yytext[0];}
 
 %%
+/*
+int main()
+{
+  yyin=fopen("test2.c","r");
+
+  constant_table=create_table();
+  symbol_table = create_table();
+
+  yylex();
+
+  printf("\n\tSymbol table");
+  display(symbol_table);
+  printf("\n\tConstants Table");
+  display(constant_table);
+
+  printf("NOTE: Please refer tokens.h for token meanings\n");
+} */

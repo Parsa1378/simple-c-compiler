@@ -8,6 +8,7 @@ Test Case 5
 
 int main()
 {
+  unsigned int a = 0x0f;
   long int mylong = 123456l;
   long int i, j;
 

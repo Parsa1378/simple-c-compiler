@@ -1,4 +1,7 @@
-enum keywords {
+
+
+enum keywords
+{
   INT=100,
   LONG,
   LONG_LONG,
@@ -14,7 +17,8 @@ enum keywords {
   ELSE
 };
 
-enum operators {
+enum operators
+{
   DECREMENT=200,
   INCREMENT,
   PTR_SELECT,
@@ -33,7 +37,8 @@ enum operators {
   GR_THAN
 };
 
-enum special_symbols {
+enum special_symbols
+{
   DELIMITER=300,
   OPEN_BRACES,
   CLOSE_BRACES,
@@ -45,13 +50,15 @@ enum special_symbols {
   FW_SLASH
 };
 
-enum constants {
+enum constants
+{
   HEX_CONSTANT=400,
   DEC_CONSTANT,
   HEADER_FILE,
   STRING
 };
 
-enum IDENTIFIER {
+enum IDENTIFIER
+{
   IDENTIFIER=500
 };

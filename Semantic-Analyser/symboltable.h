@@ -1,5 +1,3 @@
-// Semantic Analyser
-
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -14,7 +12,8 @@ int table_index = 0;
 int current_scope = 0;
 
 /* struct to hold each entry */
-struct entry_s {
+struct entry_s
+{
 	char* lexeme;
 	double value;
 	int data_type;
@@ -28,7 +27,8 @@ struct entry_s {
 typedef struct entry_s entry_t;
 
 /* Wrapper for symbol table with pointer to symbol table of parent scope */
-struct table_s {
+struct table_s
+{
 	entry_t** symbol_table;
 	int parent;
 };
@@ -38,7 +38,8 @@ typedef struct table_s table_t;
 extern table_t symbol_table_list[NUM_TABLES];
 
 /* Create a new hash_table. */
-entry_t** create_table() {
+entry_t** create_table()
+{
 	entry_t** hash_table_ptr = NULL; // declare a pointer
 
 	/* Allocate memory for a hashtable array of size HASH_TABLE_SIZE */
@@ -56,7 +57,8 @@ entry_t** create_table() {
 	return hash_table_ptr;
 }
 
-int create_new_scope() {
+int create_new_scope()
+{
 	table_index++;
 
 	symbol_table_list[table_index].symbol_table = create_table();
@@ -65,13 +67,19 @@ int create_new_scope() {
 	return table_index;
 }
 
-int exit_scope() {
+int exit_scope()
+{
 	return symbol_table_list[current_scope].parent;
 }
 /* Generate hash from a string. Then generate an index in [0, HASH_TABLE_SIZE) */
-uint32_t hash( char *lexeme ) {
+uint32_t hash( char *lexeme )
+{
 	size_t i;
 	uint32_t hash;
+
+	/* Apply jenkin's hash function
+	* https://en.wikipedia.org/wiki/Jenkins_hash_function#one-at-a-time
+	*/
 	for ( hash = i = 0; i < strlen(lexeme); ++i ) {
         hash += lexeme[i];
         hash += ( hash << 10 );
@@ -85,7 +93,8 @@ uint32_t hash( char *lexeme ) {
 }
 
 /* Create an entry for a lexeme, token pair. This will be called from the insert function */
-entry_t *create_entry( char *lexeme, int value, int data_type ) {
+entry_t *create_entry( char *lexeme, int value, int data_type )
+{
 	entry_t *new_entry;
 
 	/* Allocate space for new_entry */
@@ -109,7 +118,8 @@ entry_t *create_entry( char *lexeme, int value, int data_type ) {
 }
 
 /* Search for an entry given a lexeme. Return a pointer to the entry of the lexeme exists, else return NULL */
-entry_t* search(entry_t** hash_table_ptr, char* lexeme) {
+entry_t* search(entry_t** hash_table_ptr, char* lexeme)
+{
 	uint32_t idx = 0;
 	entry_t* myentry;
 
@@ -133,7 +143,8 @@ entry_t* search(entry_t** hash_table_ptr, char* lexeme) {
 }
 
 // Search recursively in every parent scope for lexeme
-entry_t* search_recursive(char* lexeme) {
+entry_t* search_recursive(char* lexeme)
+{
 	int idx = current_scope;
 	entry_t* finder = NULL;
 
@@ -150,7 +161,8 @@ entry_t* search_recursive(char* lexeme) {
 	return finder;
 }
 /* Insert an entry into a hash table. */
-entry_t* insert( entry_t** hash_table_ptr, char* lexeme, int value, int data_type) {
+entry_t* insert( entry_t** hash_table_ptr, char* lexeme, int value, int data_type)
+{
 	// Make sure you pass the current scope symbol table here
 	entry_t* finder = search( hash_table_ptr, lexeme );
 	if( finder != NULL) // If lexeme already exists, don't insert, return NULL
@@ -188,7 +200,8 @@ entry_t* insert( entry_t** hash_table_ptr, char* lexeme, int value, int data_typ
 }
 
 // This is called after a function call to check if param list match
-int check_parameter_list(entry_t* entry, int* list, int m) {
+int check_parameter_list(entry_t* entry, int* list, int m)
+{
 	int* parameter_list = entry->parameter_list;
 
 	if(m != entry->num_params)
@@ -206,7 +219,8 @@ int check_parameter_list(entry_t* entry, int* list, int m) {
 	return 1;
 }
 
-void fill_parameter_list(entry_t* entry, int* list, int n) {
+void fill_parameter_list(entry_t* entry, int* list, int n)
+{
 	entry->parameter_list = (int *)malloc(n*sizeof(int));
 
 	int i;
@@ -218,7 +232,8 @@ void fill_parameter_list(entry_t* entry, int* list, int n) {
 }
 
 
-void print_dashes(int n) {
+void print_dashes(int n)
+{
   printf("\n");
 
 	int i;
@@ -228,7 +243,8 @@ void print_dashes(int n) {
 }
 
 // Traverse the hash table and print all the entries
-void display_symbol_table(entry_t** hash_table_ptr) {
+void display_symbol_table(entry_t** hash_table_ptr)
+{
 	int i;
 	entry_t* traverser;
 
@@ -260,7 +276,8 @@ void display_symbol_table(entry_t** hash_table_ptr) {
 
 }
 
-void display_constant_table(entry_t** hash_table_ptr) {
+void display_constant_table(entry_t** hash_table_ptr)
+{
 	int i;
 	entry_t* traverser;
 
@@ -283,7 +300,8 @@ void display_constant_table(entry_t** hash_table_ptr) {
 	print_dashes(25);
 }
 
-void display_all() {
+void display_all()
+{
 		int i;
 		for(i=0; i<=table_index; i++)
 		{

@@ -1,7 +1,4 @@
 
-// Description : This file contains functions related to a hash organised symbol table.
-
-
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,7 +18,9 @@ struct entry_s
 
 typedef struct entry_s entry_t;
 
-entry_t** create_table() {
+/* Create a new hash_table. */
+entry_t** create_table()
+{
 	entry_t** hash_table_ptr = NULL; // declare a pointer
 
 	/* Allocate memory for a hashtable array of size HASH_TABLE_SIZE */
@@ -39,10 +38,15 @@ entry_t** create_table() {
 	return hash_table_ptr;
 }
 
-uint32_t hash( char *lexeme ) {
+/* Generate hash from a string. Then generate an index in [0, HASH_TABLE_SIZE) */
+uint32_t hash( char *lexeme )
+{
 	size_t i;
 	uint32_t hash;
 
+	/* Apply jenkin's hash function
+	* https://en.wikipedia.org/wiki/Jenkins_hash_function#one-at-a-time
+	*/
 	for ( hash = i = 0; i < strlen(lexeme); ++i ) {
         hash += lexeme[i];
         hash += ( hash << 10 );
@@ -52,15 +56,19 @@ uint32_t hash( char *lexeme ) {
 	hash ^= ( hash >> 11 );
     hash += ( hash << 15 );
 
-	return hash % HASH_TABLE_SIZE;
+	return hash % HASH_TABLE_SIZE; // return an index in [0, HASH_TABLE_SIZE)
 }
 
-entry_t *create_entry( char *lexeme, int value ) {
+/* Create an entry for a lexeme, token pair. This will be called from the insert function */
+entry_t *create_entry( char *lexeme, int value )
+{
 	entry_t *newentry;
 
+	/* Allocate space for newentry */
 	if( ( newentry = malloc( sizeof( entry_t ) ) ) == NULL ) {
 		return NULL;
 	}
+	/* Copy lexeme to newentry location using strdup (string-duplicate). Return NULL if it fails */
 	if( ( newentry->lexeme = strdup( lexeme ) ) == NULL ) {
 		return NULL;
 	}
@@ -71,12 +79,16 @@ entry_t *create_entry( char *lexeme, int value ) {
 	return newentry;
 }
 
-entry_t* search( entry_t** hash_table_ptr, char* lexeme ) {
+/* Search for an entry given a lexeme. Return a pointer to the entry of the lexeme exists, else return NULL */
+entry_t* search( entry_t** hash_table_ptr, char* lexeme )
+{
 	uint32_t idx = 0;
 	entry_t* myentry;
 
+    // get the index of this lexeme as per the hash function
 	idx = hash( lexeme );
 
+	/* Traverse the linked list at this idx and see if lexeme exists */
 	myentry = hash_table_ptr[idx];
 
 	while( myentry != NULL && strcmp( lexeme, myentry->lexeme ) != 0 )
@@ -84,15 +96,17 @@ entry_t* search( entry_t** hash_table_ptr, char* lexeme ) {
 		myentry = myentry->successor;
 	}
 
-	if(myentry == NULL)
+	if(myentry == NULL) // lexeme is not found
 		return NULL;
 
-	else 
+	else // lexeme found
 		return myentry;
 
 }
 
-entry_t* insert( entry_t** hash_table_ptr, char* lexeme, int value ) {
+/* Insert an entry into a hash table. */
+entry_t* insert( entry_t** hash_table_ptr, char* lexeme, int value )
+{
 	entry_t* finder = search( hash_table_ptr, lexeme );
 	if( finder != NULL) // If lexeme already exists, don't insert, return
 	    return finder ;
@@ -101,7 +115,7 @@ entry_t* insert( entry_t** hash_table_ptr, char* lexeme, int value ) {
 	entry_t* newentry = NULL;
 	entry_t* head = NULL;
 
-	idx = hash( lexeme ); 
+	idx = hash( lexeme ); // Get the index for this lexeme based on the hash function
 	newentry = create_entry( lexeme, value ); // Create an entry using the <lexeme, token> pair
 
 	if(newentry == NULL) // In case there was some error while executing create_entry()
@@ -125,12 +139,13 @@ entry_t* insert( entry_t** hash_table_ptr, char* lexeme, int value ) {
 }
 
 // Traverse the hash table and print all the entries
-void display(entry_t** hash_table_ptr) {
+void display(entry_t** hash_table_ptr)
+{
 	int i;
 	entry_t* traverser;
-    printf("\n===\n");
+    printf("\n====================================================\n");
     printf(" %-20s %-20s %-20s\n","lexeme","value","data-type");
-    printf("===\n");
+    printf("====================================================\n");
 
 	for( i=0; i < HASH_TABLE_SIZE; i++)
 	{
@@ -142,6 +157,6 @@ void display(entry_t** hash_table_ptr) {
 			traverser = traverser->successor;
 		}
 	}
-    printf("=====\n");
+    printf("====================================================\n");
 
 }

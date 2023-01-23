@@ -1,4 +1,3 @@
-// This file contains functions related to a hash organised symbol table
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -43,7 +42,10 @@ uint32_t hash( char *lexeme )
 {
 	size_t i;
 	uint32_t hash;
-	
+
+	/* Apply jenkin's hash function
+	* https://en.wikipedia.org/wiki/Jenkins_hash_function#one-at-a-time
+	*/
 	for ( hash = i = 0; i < strlen(lexeme); ++i ) {
         hash += lexeme[i];
         hash += ( hash << 10 );
