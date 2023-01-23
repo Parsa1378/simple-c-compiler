@@ -6,4 +6,8 @@ According to the *Compilers: Principles, Techniques, and Tools 1986* book, basic
 ![Compiler phase](https://user-images.githubusercontent.com/48151522/214047741-b674ba7e-f937-45ff-a22a-7140e5a3fea6.jpg)
 <br />
 **Lexical analyzer ---> with lex**<br />
-**Syntax analyzer ---> with YACC**
+**Syntax analyzer ---> with YACC**<br />
+
+## Video Link:
+In this video we explain how we have implemented this project:<br />
+https://drive.google.com/file/d/144qlsDRtvI2tUYEI6VPwDctISa8t-4HP/view?usp=sharing
