@@ -12,7 +12,7 @@ enum keywords {
   CHAR,
   IF,
   ELSE
-}
+};
 
 enum operators {
   DECREMENT=200,
@@ -31,7 +31,7 @@ enum operators {
   MODULO,
   LS_THAN,
   GR_THAN
-}
+};
 
 enum special_symbols {
   DELIMITER=300,
@@ -43,15 +43,15 @@ enum special_symbols {
   OPEN_SQ_BRKT,
   CLOSE_SQ_BRKT,
   FW_SLASH
-}
+};
 
 enum constants {
   HEX_CONSTANT=400,
   DEC_CONSTANT,
   HEADER_FILE,
   STRING
-}
+};
 
 enum IDENTIFIER {
   IDENTIFIER=500
-}
+};
