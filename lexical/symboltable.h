@@ -10,7 +10,7 @@ struct entry_s {
     char* lexeme;
     int token_name;
     struct entry_s* successor;
-}
+};
 
 typedef struct entry_s entry_t;
 

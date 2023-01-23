@@ -17,7 +17,7 @@ ws  [ \t\r\f\v]+
 identifier (_|{letter})({letter}|{digit}|_){0,31}
 hex [0-9a-f]
 
- /* Exclusive states */
+/* Exclusive states */
 %x CMNT
 %x PREPROC
 
